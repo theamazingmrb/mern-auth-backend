@@ -97,14 +97,13 @@ exports.signin = (req, res) => {
         ) 
 
         // if password is not valid, we returning invalid password
+        //return a boolean
         if (!passwordIsValid) {
             return res.status(401).send({ accessToken: null, message: "invalid password"})
         }
 
-        console.log(passwordIsValid)
-
         // is password is valid we generage a new token
-        const token = jwt.sign({id: user.id}, config.secret, {
+        const token = jwt.sign({id: user._id}, config.secret, {
             expiresIn: 86400// expires token in 24 hours
         })
 
@@ -113,7 +112,7 @@ exports.signin = (req, res) => {
 
 
         for ( let i = 0; i < user.roles.length; i++) {
-            authorities.push("ROLE_" + user.role[i].name.toUpperCase())
+            authorities.push("ROLE_" + user.roles[i].name.toUpperCase())
         }
         // seding that response back
         res.status(200).send({
