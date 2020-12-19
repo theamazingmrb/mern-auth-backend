@@ -29,12 +29,11 @@ verifyWebToken = (req, res, next) => {
 
 isAdmin = (req, res, next) => {
     // .exec return the urser we want to have access too ( if im not mistaken .then will not)
-    User.find(req.user.id).exec((err, user) => {
+    User.findOne({_id: req.userId}).exec((err, user) => {
         // throwing an erro becuase this user does not exist
         if (err) {
             return res.status(500).send({message: err})
         }
-        
         // find users role if the user exiss
         Role.find({
             _id: { $in: user.roles}
